@@ -1,12 +1,13 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { render } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import TableOfContents from '../../components/TableOfContents.astro';
 import { tagSlug, readingMinutes } from '../../lib/tags';
+import { getProblems } from '../../lib/content';
 
 export async function getStaticPaths() {
-  const problems = (await getCollection('problems', ({ data }) => !data.draft)).sort(
+  const problems = (await getProblems()).sort(
     (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
   );
 
@@ -50,6 +51,7 @@ const source = problem.data.source;
   <p class="post-meta">
     <span>{formattedDate}</span>
     <span>{minutes} min read</span>
+    {problem.data.draft && <span class="badge badge--draft">Draft — not published</span>}
     {source && <span class="badge">Study notes</span>}
     {
       problem.data.tags.map((tag) => (

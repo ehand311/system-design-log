@@ -2,7 +2,9 @@ import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
 const problems = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/problems' }),
+  // Underscore-prefixed files (the template) are excluded outright, so they
+  // never appear even when drafts are visible in dev.
+  loader: glob({ pattern: ['**/*.md', '!**/_*.md'], base: './src/content/problems' }),
   schema: z.object({
     title: z.string(),
     summary: z.string(),

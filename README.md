@@ -13,8 +13,9 @@ Built with [Astro](https://astro.build/), deployed to Cloudflare Workers, scaffo
 3. Fill in the frontmatter and the body.
 4. Set `draft: false` when it's ready to publish.
 
-Files starting with `_` are ignored, so the template never shows up on the site. Anything with
-`draft: true` is excluded from the build.
+Files starting with `_` are excluded by the loader, so the template never shows up. Anything with
+`draft: true` is excluded from production builds but **visible in `npm run dev`**, marked with a
+Draft badge — so you can see a write-up rendered while you work on it.
 
 ### Drafts in progress
 

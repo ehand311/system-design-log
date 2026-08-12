@@ -1,11 +1,11 @@
 ---
-import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { tagSlug } from '../../lib/tags';
+import { getProblems } from '../../lib/content';
 
 export async function getStaticPaths() {
-  const problems = await getCollection('problems', ({ data }) => !data.draft);
+  const problems = await getProblems();
 
   // One page per distinct tag slug; keep the first-seen display spelling.
   const groups = new Map<string, { label: string; entries: CollectionEntry<'problems'>[] }>();

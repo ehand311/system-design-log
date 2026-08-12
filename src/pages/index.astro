@@ -1,9 +1,9 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { tagSlug } from '../lib/tags';
+import { getProblems } from '../lib/content';
 
-const published = await getCollection('problems', ({ data }) => !data.draft);
+const published = await getProblems();
 
 // Number by publication order so an entry's number never changes when a new
 // one is added: oldest is 01, permanently. Then display newest first.
@@ -44,6 +44,7 @@ const fmt = (d: Date) =>
               <div class="entry__body">
                 <h3 class="entry__title">
                   <a href={`/problems/${problem.id}/`}>{problem.data.title}</a>
+                  {problem.data.draft && <span class="badge badge--draft">Draft</span>}
                 </h3>
                 <p class="entry__summary">{problem.data.summary}</p>
                 <p class="entry__date">{fmt(problem.data.date)}</p>
