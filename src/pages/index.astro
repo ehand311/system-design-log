@@ -1,0 +1,56 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const problems = (await getCollection('problems', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+
+// Frontmatter dates parse as UTC midnight; format in UTC so they don't shift a day back.
+const fmt = (d: Date) =>
+  d.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    timeZone: 'UTC',
+  });
+---
+
+<BaseLayout title="System Design Log — Eric Handal">
+  <p class="eyebrow">System design log</p>
+  <h1>What I learned building it out loud</h1>
+  <p class="lede">
+    One problem at a time. For each, I work through the requirements, sketch an approach, and write
+    down the tradeoffs I hit — including the ones I got wrong the first time. These are learning
+    notes, not authoritative guides.
+  </p>
+
+  <h2 class="section-label">Problems</h2>
+  {
+    problems.length === 0 ? (
+      <p class="empty">No write-ups published yet. First one is in progress.</p>
+    ) : (
+      <ul class="entry-list">
+        {problems.map((problem, i) => (
+          <li class="entry">
+            <a class="entry__link" href={`/problems/${problem.id}`}>
+              <span class="entry__num">{String(i + 1).padStart(2, '0')}</span>
+              <span>
+                <h3 class="entry__title">{problem.data.title}</h3>
+                <p class="entry__summary">{problem.data.summary}</p>
+                {problem.data.tags.length > 0 && (
+                  <span class="tag-row">
+                    {problem.data.tags.map((tag) => (
+                      <span class="tag">{tag}</span>
+                    ))}
+                  </span>
+                )}
+                <p class="entry__date">{fmt(problem.data.date)}</p>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</BaseLayout>

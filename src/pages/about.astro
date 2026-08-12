@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="About — System Design Log" description="Why this site exists and how to read it.">
+  <p class="eyebrow">About</p>
+  <h1>Why this site exists</h1>
+
+  <div class="prose">
+    <p>
+      I'm a Senior Technical Program Manager at Cloudflare working in security engineering. I spend
+      most of my time around systems rather than inside them, and I wanted a structured way to close
+      that gap — so I started working through system design problems and writing down what I learned.
+    </p>
+
+    <div class="callout">
+      <p>
+        <strong>What this is not:</strong> a teaching resource. I'm not a subject matter expert on distributed
+        systems, and nothing here should be treated as a reference implementation. These are my working
+        notes, published as-is.
+      </p>
+    </div>
+
+    <h2>How each write-up is structured</h2>
+    <p>Every problem follows roughly the same shape, because the repetition is the point:</p>
+    <ul>
+      <li><strong>Requirements</strong> — what the system has to do, and the constraints I assumed.</li>
+      <li><strong>Estimates</strong> — rough traffic, storage, and bandwidth math to size the design.</li>
+      <li><strong>Approach</strong> — the design I landed on and how data moves through it.</li>
+      <li><strong>Tradeoffs</strong> — what I gave up, and the alternatives I rejected.</li>
+      <li><strong>What I'd do differently</strong> — where my first pass was wrong.</li>
+    </ul>
+
+    <h2>How it was built</h2>
+    <p>
+      The site is a static <a href="https://astro.build/">Astro</a> build, deployed to Cloudflare
+      Pages from GitHub. I built it with <a href="https://claude.com/claude-code">Claude Code</a> —
+      the write-ups themselves are mine, but the scaffolding, styling, and deploy pipeline were done
+      in collaboration with an agent. That was partly the point: I wanted a working feel for what
+      that workflow is actually like end to end.
+    </p>
+    <p>
+      An earlier project on <a href="https://erichandal.me/">my portfolio</a> was built the same way
+      using OpenAI Codex, so this doubles as a side-by-side comparison of the two.
+    </p>
+  </div>
+</BaseLayout>

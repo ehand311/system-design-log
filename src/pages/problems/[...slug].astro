@@ -1,0 +1,44 @@
+---
+import { getCollection, render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const problems = await getCollection('problems', ({ data }) => !data.draft);
+  return problems.map((problem) => ({
+    params: { slug: problem.id },
+    props: { problem },
+  }));
+}
+
+interface Props {
+  problem: CollectionEntry<'problems'>;
+}
+
+const { problem } = Astro.props;
+const { Content } = await render(problem);
+
+// Frontmatter dates parse as UTC midnight; format in UTC so they don't shift a day back.
+const formattedDate = problem.data.date.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  timeZone: 'UTC',
+});
+---
+
+<BaseLayout title={`${problem.data.title} — Eric Handal`} description={problem.data.summary}>
+  <a class="back-link" href="/">&larr; All problems</a>
+
+  <p class="post-meta">
+    <span>{formattedDate}</span>
+    {problem.data.tags.map((tag) => <span class="tag">{tag}</span>)}
+  </p>
+
+  <h1>{problem.data.title}</h1>
+  <p class="lede">{problem.data.summary}</p>
+
+  <article class="prose">
+    <Content />
+  </article>
+</BaseLayout>
