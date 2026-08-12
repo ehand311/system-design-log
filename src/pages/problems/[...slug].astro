@@ -4,12 +4,11 @@ import type { CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import TableOfContents from '../../components/TableOfContents.astro';
 import { tagSlug, readingMinutes } from '../../lib/tags';
-import { getProblems } from '../../lib/content';
+import { getProblems, byPublicationOrder } from '../../lib/content';
 
 export async function getStaticPaths() {
-  const problems = (await getProblems()).sort(
-    (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
-  );
+  // Same ordering as the homepage, reversed, so prev/next follows the list.
+  const problems = (await getProblems()).sort(byPublicationOrder).reverse();
 
   return problems.map((problem, i) => ({
     params: { slug: problem.id },
