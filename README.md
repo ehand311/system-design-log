@@ -3,7 +3,7 @@
 Notes from working through system design problems — the approach, the tradeoffs, and what I'd do
 differently. Learning notes, not a teaching resource.
 
-Built with [Astro](https://astro.build/), deployed to Cloudflare Pages, scaffolded with
+Built with [Astro](https://astro.build/), deployed to Cloudflare Workers, scaffolded with
 [Claude Code](https://claude.com/claude-code).
 
 ## Adding a write-up
@@ -48,7 +48,7 @@ Runs at `http://localhost:4321`.
 
 ## Deploying
 
-Pushing to `main` triggers a Cloudflare Pages build automatically.
+Pushing to `main` triggers a Cloudflare Workers build automatically.
 
 - Build command: `npm run build`
 - Output directory: `dist`
