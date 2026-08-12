@@ -1,0 +1,49 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { tagSlug } from '../../lib/tags';
+
+const problems = await getCollection('problems', ({ data }) => !data.draft);
+
+const counts = new Map<string, { label: string; count: number }>();
+for (const problem of problems) {
+  for (const tag of problem.data.tags) {
+    const slug = tagSlug(tag);
+    const existing = counts.get(slug);
+    if (existing) existing.count += 1;
+    else counts.set(slug, { label: tag, count: 1 });
+  }
+}
+
+// Most-used first, then alphabetical so ordering is stable between builds.
+const tags = [...counts].sort(
+  (a, b) => b[1].count - a[1].count || a[1].label.localeCompare(b[1].label)
+);
+---
+
+<BaseLayout title="Tags — System Design Log" description="Browse write-ups by topic.">
+  <a class="back-link" href="/">&larr; All problems</a>
+
+  <p class="eyebrow">Tags</p>
+  <h1>Browse by topic</h1>
+  <p class="lede">Every topic covered so far, most-written-about first.</p>
+
+  {
+    tags.length === 0 ? (
+      <p class="empty">No tags yet.</p>
+    ) : (
+      <ul class="tag-index">
+        {tags.map(([slug, { label, count }]) => (
+          <li>
+            <a class="tag-index__link" href={`/tags/${slug}/`}>
+              <span class="tag">{label}</span>
+              <span class="tag-index__count">
+                {count} {count === 1 ? 'write-up' : 'write-ups'}
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</BaseLayout>

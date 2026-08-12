@@ -1,10 +1,16 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { tagSlug } from '../lib/tags';
 
-const problems = (await getCollection('problems', ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
-);
+const published = await getCollection('problems', ({ data }) => !data.draft);
+
+// Number by publication order so an entry's number never changes when a new
+// one is added: oldest is 01, permanently. Then display newest first.
+const byOldest = [...published].sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf());
+const numberFor = new Map(byOldest.map((p, i) => [p.id, String(i + 1).padStart(2, '0')]));
+
+const problems = [...published].sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
 // Frontmatter dates parse as UTC midnight; format in UTC so they don't shift a day back.
 const fmt = (d: Date) =>
@@ -31,23 +37,27 @@ const fmt = (d: Date) =>
       <p class="empty">No write-ups published yet. First one is in progress.</p>
     ) : (
       <ul class="entry-list">
-        {problems.map((problem, i) => (
+        {problems.map((problem) => (
           <li class="entry">
-            <a class="entry__link" href={`/problems/${problem.id}/`}>
-              <span class="entry__num">{String(i + 1).padStart(2, '0')}</span>
-              <span>
-                <h3 class="entry__title">{problem.data.title}</h3>
+            <div class="entry__row">
+              <span class="entry__num">{numberFor.get(problem.id)}</span>
+              <div class="entry__body">
+                <h3 class="entry__title">
+                  <a href={`/problems/${problem.id}/`}>{problem.data.title}</a>
+                </h3>
                 <p class="entry__summary">{problem.data.summary}</p>
+                <p class="entry__date">{fmt(problem.data.date)}</p>
                 {problem.data.tags.length > 0 && (
                   <span class="tag-row">
                     {problem.data.tags.map((tag) => (
-                      <span class="tag">{tag}</span>
+                      <a class="tag" href={`/tags/${tagSlug(tag)}/`}>
+                        {tag}
+                      </a>
                     ))}
                   </span>
                 )}
-                <p class="entry__date">{fmt(problem.data.date)}</p>
-              </span>
-            </a>
+              </div>
+            </div>
           </li>
         ))}
       </ul>

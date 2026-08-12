@@ -4,6 +4,11 @@ summary: 'One sentence on the most interesting thing you found. This shows on th
 date: 2026-01-01
 tags: ['caching', 'databases']
 draft: true
+# Only when following someone else's breakdown. Adds a "Study notes" badge
+# and an attribution line. Delete both lines for original work.
+# source:
+#   label: "Whose breakdown this follows"
+#   url: 'https://example.com/'
 ---
 
 <!--

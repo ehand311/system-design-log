@@ -1,0 +1,94 @@
+---
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+  headings: MarkdownHeading[];
+}
+
+const { headings } = Astro.props;
+
+// Only top-level sections. A rail that mirrors every h3 stops being scannable,
+// which defeats the point of having it.
+const sections = headings.filter((h) => h.depth === 2);
+
+// Under three sections the rail is longer than the thing it indexes.
+const show = sections.length >= 3;
+---
+
+{
+  show && (
+    <nav class="toc" aria-label="On this page">
+      <p class="toc__label">On this page</p>
+      <ol class="toc__list">
+        {sections.map((s) => (
+          <li>
+            <a class="toc__link" href={`#${s.slug}`} data-toc-link={s.slug}>
+              {s.text}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  )
+}
+
+{/* Kept outside the conditional: Astro bundles script tags statically, and it
+    no-ops when no rail is rendered. Script bodies must be literal, not
+    expressions, or Astro drops them from the production build. */}
+<script>
+  const links = document.querySelectorAll('[data-toc-link]');
+
+  if (links.length) {
+    const ids = new Set(
+      Array.from(links).map((l) => l.getAttribute('data-toc-link'))
+    );
+    const headings = Array.from(document.querySelectorAll('.prose h2')).filter((h) =>
+      ids.has(h.id)
+    );
+
+    if (headings.length) {
+      let current: string | null = null;
+
+      const setActive = (id: string) => {
+        if (id === current) return;
+        current = id;
+        links.forEach((l) => {
+          l.classList.toggle('is-active', l.getAttribute('data-toc-link') === id);
+        });
+      };
+
+      const update = () => {
+        // At the bottom of the page the final sections can never reach the read
+        // line, so pin the last one rather than leaving it permanently unlit.
+        const atBottom =
+          window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2;
+        if (atBottom) {
+          setActive(headings[headings.length - 1].id);
+          return;
+        }
+
+        // Otherwise: the heading whose top has most recently passed the read line.
+        const line = window.scrollY + window.innerHeight * 0.25;
+        let active = headings[0];
+        for (const h of headings) {
+          if (h.getBoundingClientRect().top + window.scrollY <= line) active = h;
+        }
+        setActive(active.id);
+      };
+
+      let ticking = false;
+      const onScroll = () => {
+        if (ticking) return;
+        ticking = true;
+        window.requestAnimationFrame(() => {
+          update();
+          ticking = false;
+        });
+      };
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll, { passive: true });
+      update();
+    }
+  }
+</script>

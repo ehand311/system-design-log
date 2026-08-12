@@ -10,6 +10,8 @@ const {
   title,
   description = 'Notes from working through system design problems — approach, tradeoffs, and what I would do differently.',
 } = Astro.props;
+
+const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : Astro.url.pathname;
 ---
 
 <!doctype html>
@@ -18,33 +20,50 @@ const {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonical} />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="System Design Log"
+      href="/rss.xml"
+    />
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary" />
   </head>
   <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
     <header class="site-header">
       <div class="wrap">
-        <a class="site-header__brand" href="/">Eric Handal</a>
-        <nav class="site-nav">
+        <a class="site-header__brand" href="/">
+          Eric Handal <span class="site-header__sub">System Design Log</span>
+        </a>
+        <nav class="site-nav" aria-label="Primary">
           <a href="/">Problems</a>
+          <a href="/tags/">Topics</a>
           <a href="/about/">About</a>
-          <a href="https://erichandal.me/">Portfolio</a>
+          <a href="https://erichandal.me/" class="is-external">
+            Portfolio<span aria-hidden="true" class="ext">↗</span>
+          </a>
         </nav>
       </div>
     </header>
 
-    <main class="wrap">
+    <main class="wrap" id="main">
       <slot />
     </main>
 
     <footer class="site-footer">
       <div class="wrap">
         <span>Built with Astro and Claude Code. Hosted on Cloudflare.</span>
-        <span>&copy; {new Date().getFullYear()} Eric Handal</span>
+        <span>
+          <a href="/rss.xml">RSS</a> &middot; &copy; {new Date().getFullYear()} Eric Handal
+        </span>
       </div>
     </footer>
   </body>

@@ -1,0 +1,77 @@
+---
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { tagSlug } from '../../lib/tags';
+
+export async function getStaticPaths() {
+  const problems = await getCollection('problems', ({ data }) => !data.draft);
+
+  // One page per distinct tag slug; keep the first-seen display spelling.
+  const groups = new Map<string, { label: string; entries: CollectionEntry<'problems'>[] }>();
+
+  for (const problem of problems) {
+    for (const tag of problem.data.tags) {
+      const slug = tagSlug(tag);
+      if (!groups.has(slug)) groups.set(slug, { label: tag, entries: [] });
+      groups.get(slug)!.entries.push(problem);
+    }
+  }
+
+  return [...groups].map(([slug, { label, entries }]) => ({
+    params: { tag: slug },
+    props: {
+      label,
+      entries: entries.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()),
+    },
+  }));
+}
+
+interface Props {
+  label: string;
+  entries: CollectionEntry<'problems'>[];
+}
+
+const { label, entries } = Astro.props;
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    timeZone: 'UTC',
+  });
+---
+
+<BaseLayout
+  title={`${label} — System Design Log`}
+  description={`Write-ups tagged ${label}.`}
+>
+  <a class="back-link" href="/">&larr; All problems</a>
+
+  <p class="eyebrow">Tag</p>
+  <h1>{label}</h1>
+  <p class="lede">
+    {entries.length} {entries.length === 1 ? 'write-up' : 'write-ups'} tagged <code>{label}</code>.
+  </p>
+
+  <ul class="entry-list">
+    {
+      entries.map((problem) => (
+        <li class="entry">
+          <div class="entry__row">
+            <div class="entry__body">
+              <h3 class="entry__title">
+                <a href={`/problems/${problem.id}/`}>{problem.data.title}</a>
+              </h3>
+              <p class="entry__summary">{problem.data.summary}</p>
+              <p class="entry__date">{fmt(problem.data.date)}</p>
+            </div>
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+
+  <p class="post-nav__all"><a href="/tags/">Browse all tags</a></p>
+</BaseLayout>

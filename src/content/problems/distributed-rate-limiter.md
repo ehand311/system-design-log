@@ -4,12 +4,10 @@ summary: 'Notes from working through the token bucket approach — why atomicity
 date: 2026-08-12
 tags: ['rate-limiting', 'redis', 'distributed-systems']
 draft: false
+source:
+  label: "Hello Interview's distributed rate limiter breakdown"
+  url: 'https://www.hellointerview.com/learn/system-design/problem-breakdowns/distributed-rate-limiter'
 ---
-
-These are study notes, not an original design. I worked through
-[Hello Interview's breakdown of the distributed rate limiter](https://www.hellointerview.com/learn/system-design/problem-breakdowns/distributed-rate-limiter)
-and wrote down what I took away from it. Credit for the framing goes to them; the errors and
-oversimplifications below are mine.
 
 I picked this one first because it's adjacent to what I work on. I expected the interesting
 decision to be *which algorithm* — it isn't.

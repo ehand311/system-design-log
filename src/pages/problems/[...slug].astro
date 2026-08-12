@@ -2,6 +2,8 @@
 import { getCollection, render } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import TableOfContents from '../../components/TableOfContents.astro';
+import { tagSlug, readingMinutes } from '../../lib/tags';
 
 export async function getStaticPaths() {
   const problems = (await getCollection('problems', ({ data }) => !data.draft)).sort(
@@ -26,7 +28,7 @@ interface Props {
 }
 
 const { problem, newer, older } = Astro.props;
-const { Content } = await render(problem);
+const { Content, headings } = await render(problem);
 
 // Frontmatter dates parse as UTC midnight; format in UTC so they don't shift a day back.
 const formattedDate = problem.data.date.toLocaleDateString('en-US', {
@@ -35,18 +37,40 @@ const formattedDate = problem.data.date.toLocaleDateString('en-US', {
   day: 'numeric',
   timeZone: 'UTC',
 });
+
+const minutes = readingMinutes(problem.body ?? '');
+const source = problem.data.source;
 ---
 
 <BaseLayout title={`${problem.data.title} — Eric Handal`} description={problem.data.summary}>
+  <TableOfContents headings={headings} />
+
   <a class="back-link" href="/">&larr; All problems</a>
 
   <p class="post-meta">
     <span>{formattedDate}</span>
-    {problem.data.tags.map((tag) => <span class="tag">{tag}</span>)}
+    <span>{minutes} min read</span>
+    {source && <span class="badge">Study notes</span>}
+    {
+      problem.data.tags.map((tag) => (
+        <a class="tag" href={`/tags/${tagSlug(tag)}/`}>
+          {tag}
+        </a>
+      ))
+    }
   </p>
 
   <h1>{problem.data.title}</h1>
   <p class="lede">{problem.data.summary}</p>
+
+  {
+    source && (
+      <p class="source-note">
+        Worked through <a href={source.url}>{source.label}</a>. The framing is theirs; the notes and
+        any errors are mine.
+      </p>
+    )
+  }
 
   <article class="prose">
     <Content />
