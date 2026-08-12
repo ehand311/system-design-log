@@ -33,7 +33,7 @@ const fmt = (d: Date) =>
       <ul class="entry-list">
         {problems.map((problem, i) => (
           <li class="entry">
-            <a class="entry__link" href={`/problems/${problem.id}`}>
+            <a class="entry__link" href={`/problems/${problem.id}/`}>
               <span class="entry__num">{String(i + 1).padStart(2, '0')}</span>
               <span>
                 <h3 class="entry__title">{problem.data.title}</h3>
