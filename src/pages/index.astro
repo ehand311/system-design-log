@@ -4,14 +4,10 @@ import TopicsRail from '../components/TopicsRail.astro';
 import { tagSlug } from '../lib/tags';
 import { getProblems, byPublicationOrder } from '../lib/content';
 
-// Number by publication order so an entry's number never changes when a new one
-// is added: oldest is 01, permanently.
-const byOldest = (await getProblems()).sort(byPublicationOrder);
-const numberFor = new Map(byOldest.map((p, i) => [p.id, String(i + 1).padStart(2, '0')]));
-
-// Display is the exact reverse, so the list always reads 04, 03, 02, 01 —
-// newest first, with numbers strictly descending.
-const problems = [...byOldest].reverse();
+// Newest first, numbered by position down the page so the list always starts
+// at 01. The number is a reading position, not an identifier — the URL is the
+// identifier, and nothing links to these numbers.
+const problems = (await getProblems()).sort(byPublicationOrder).reverse();
 
 // Frontmatter dates parse as UTC midnight; format in UTC so they don't shift a day back.
 const fmt = (d: Date) =>
@@ -41,10 +37,10 @@ const fmt = (d: Date) =>
         <p class="empty">No write-ups published yet. First one is in progress.</p>
       ) : (
         <ul class="entry-list">
-          {problems.map((problem) => (
+          {problems.map((problem, i) => (
             <li class="entry">
               <div class="entry__row">
-                <span class="entry__num">{numberFor.get(problem.id)}</span>
+                <span class="entry__num">{String(i + 1).padStart(2, '0')}</span>
                 <div class="entry__body">
                   <h3 class="entry__title">
                     <a href={`/problems/${problem.id}/`}>{problem.data.title}</a>

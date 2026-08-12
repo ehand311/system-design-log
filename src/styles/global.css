@@ -530,10 +530,7 @@ a.tag:hover {
 }
 
 .rail__link {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 10px;
+  display: block;
   padding: 5px 0 5px 14px;
   margin-left: -1px;
   border-left: 1px solid transparent;
@@ -545,18 +542,6 @@ a.tag:hover {
 .rail__link:hover {
   color: var(--accent-deep);
   border-left-color: var(--accent);
-}
-
-.rail__count {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  color: var(--text-dim);
-}
-
-.rail__foot {
-  margin: 16px 0 0;
-  padding-left: 14px;
-  font-size: 0.78rem;
 }
 
 /* ---------- table of contents ----------

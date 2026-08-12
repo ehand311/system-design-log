@@ -24,19 +24,18 @@ const topics = [...counts].sort(
   topics.length > 0 && (
     <aside class="rail" aria-label="Topics">
       <p class="rail__label">Topics</p>
+      {/* No counts here: bare numbers in a left rail read as a numbered list,
+          which collides with the entry numbers alongside. Counts live on the
+          /tags/ index, where they are labelled "write-ups". */}
       <ul class="rail__list">
-        {topics.map(([slug, { label, count }]) => (
+        {topics.map(([slug, { label }]) => (
           <li>
             <a class="rail__link" href={`/tags/${slug}/`}>
-              <span>{label}</span>
-              <span class="rail__count">{count}</span>
+              {label}
             </a>
           </li>
         ))}
       </ul>
-      <p class="rail__foot">
-        <a href="/rss.xml">RSS feed</a>
-      </p>
     </aside>
   )
 }
