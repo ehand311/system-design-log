@@ -4,8 +4,10 @@
   --border: #e5e7eb;
   --border-strong: #d1d5db;
   --text: #111827;
-  --text-muted: #6b7280;
-  --text-dim: #9ca3af;
+  /* Both pass WCAG AA (4.5:1) on white: muted 7.0:1, dim 4.83:1.
+     --text-dim was #9ca3af (2.54:1), which failed on nav, dates, and footer. */
+  --text-muted: #4b5563;
+  --text-dim: #6b7280;
   --accent: #0d9488;
   --accent-deep: #0f766e;
   --accent-soft: #ccfbf1;
@@ -314,19 +316,18 @@ h3 {
   color: var(--text-muted);
 }
 
-.table-scroll {
-  overflow-x: auto;
-  margin: 22px 0;
-}
-
+/* Cells wrap so comparison tables fit the column. Only genuinely wide
+   tables scroll, and they scroll inside the wrapper rather than the page. */
 .prose table {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.9rem;
   margin: 22px 0;
-  display: block;
-  overflow-x: auto;
-  white-space: nowrap;
+}
+
+.prose table td,
+.prose table th {
+  vertical-align: top;
 }
 
 .prose th,
@@ -367,6 +368,69 @@ h3 {
 
 .back-link:hover {
   color: var(--accent-deep);
+}
+
+/* ---------- end-of-article navigation ---------- */
+
+.post-nav {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 56px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+
+.post-nav__link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.post-nav__link--next {
+  text-align: right;
+}
+
+.post-nav__dir {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+
+.post-nav__title {
+  font-size: 0.98rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.post-nav__link:hover .post-nav__title {
+  color: var(--accent-deep);
+}
+
+.post-nav__all {
+  margin: 24px 0 0;
+  font-size: 0.88rem;
+}
+
+/* When there are no sibling posts, this link carries the top rule itself. */
+.prose + .post-nav__all {
+  margin-top: 56px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 560px) {
+  .post-nav {
+    grid-template-columns: 1fr;
+  }
+
+  .post-nav__link--next {
+    text-align: left;
+  }
 }
 
 .callout {

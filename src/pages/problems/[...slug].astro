@@ -4,18 +4,28 @@ import type { CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 export async function getStaticPaths() {
-  const problems = await getCollection('problems', ({ data }) => !data.draft);
-  return problems.map((problem) => ({
+  const problems = (await getCollection('problems', ({ data }) => !data.draft)).sort(
+    (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+  );
+
+  return problems.map((problem, i) => ({
     params: { slug: problem.id },
-    props: { problem },
+    props: {
+      problem,
+      // Newest-first order, so "newer" is the previous index.
+      newer: problems[i - 1] ?? null,
+      older: problems[i + 1] ?? null,
+    },
   }));
 }
 
 interface Props {
   problem: CollectionEntry<'problems'>;
+  newer: CollectionEntry<'problems'> | null;
+  older: CollectionEntry<'problems'> | null;
 }
 
-const { problem } = Astro.props;
+const { problem, newer, older } = Astro.props;
 const { Content } = await render(problem);
 
 // Frontmatter dates parse as UTC midnight; format in UTC so they don't shift a day back.
@@ -41,4 +51,30 @@ const formattedDate = problem.data.date.toLocaleDateString('en-US', {
   <article class="prose">
     <Content />
   </article>
+
+  {/* A single published problem has no siblings — skip the empty bordered row. */}
+  {
+    (newer || older) && (
+      <nav class="post-nav" aria-label="More problems">
+        {older ? (
+          <a class="post-nav__link" href={`/problems/${older.id}/`} rel="prev">
+            <span class="post-nav__dir">Older</span>
+            <span class="post-nav__title">{older.data.title}</span>
+          </a>
+        ) : (
+          <span />
+        )}
+        {newer ? (
+          <a class="post-nav__link post-nav__link--next" href={`/problems/${newer.id}/`} rel="next">
+            <span class="post-nav__dir">Newer</span>
+            <span class="post-nav__title">{newer.data.title}</span>
+          </a>
+        ) : (
+          <span />
+        )}
+      </nav>
+    )
+  }
+
+  <p class="post-nav__all"><a href="/">See all problems</a></p>
 </BaseLayout>
