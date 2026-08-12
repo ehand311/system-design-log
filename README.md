@@ -16,6 +16,23 @@ Built with [Astro](https://astro.build/), deployed to Cloudflare Workers, scaffo
 Files starting with `_` are ignored, so the template never shows up on the site. Anything with
 `draft: true` is excluded from the build.
 
+### Drafts in progress
+
+Five scaffolded write-ups are sitting in `src/content/problems/` as drafts, in the order I'd
+suggest working through them:
+
+1. `ticketmaster.md` — contention, reservations, bot abuse
+2. `web-crawler.md` — politeness, dedup, backpressure
+3. `ad-click-aggregator.md` — stream aggregation, idempotency, fraud
+4. `whatsapp.md` — E2E encryption, delivery guarantees
+5. `top-k.md` — approximate counting (most algorithm-heavy; do it last)
+
+Each contains an HTML comment with the questions an interviewer would push on. Comments don't
+render, so they're safe to leave in — but delete them once the section is written.
+
+To publish one: fill it in, **set `date` to the real publication date**, and flip `draft: false`.
+The date matters because entries are numbered by publication order.
+
 ### Frontmatter
 
 ```yaml
