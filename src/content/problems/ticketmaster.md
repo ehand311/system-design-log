@@ -2,7 +2,7 @@
 title: 'Design Ticketmaster'
 summary: 'Why holding a database transaction open while a human picks a seat is the wrong instinct, and what replaces it.'
 date: 2026-08-13
-tags: ['contention', 'locking', 'bot-abuse']
+tags: ['contention', 'caching', 'abuse']
 draft: false
 source:
   label: "Hello Interview's Ticketmaster breakdown"

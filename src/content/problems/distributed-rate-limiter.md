@@ -2,7 +2,7 @@
 title: 'Design a distributed rate limiter'
 summary: 'Notes from working through the token bucket approach — why atomicity, not algorithm choice, turns out to be the hard part.'
 date: 2026-08-12
-tags: ['rate-limiting', 'redis', 'distributed-systems']
+tags: ['caching', 'contention', 'abuse']
 draft: false
 source:
   label: "Hello Interview's distributed rate limiter breakdown"

@@ -2,7 +2,7 @@
 title: 'Design a ___'
 summary: 'One sentence on the most interesting thing you found. This shows on the homepage.'
 date: 2026-01-01
-tags: ['caching', 'databases']
+tags: ['caching', 'contention']
 draft: true
 # Only when following someone else's breakdown. Adds a "Study notes" badge
 # and an attribution line. Delete both lines for original work.

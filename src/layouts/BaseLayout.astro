@@ -4,11 +4,14 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description?: string;
+  /** 'index' widens the column and opens a left rail — for list pages, not prose. */
+  variant?: 'default' | 'index';
 }
 
 const {
   title,
   description = 'Notes from working through system design problems — approach, tradeoffs, and what I would do differently.',
+  variant = 'default',
 } = Astro.props;
 
 const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : Astro.url.pathname;
@@ -54,7 +57,7 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : As
       </div>
     </header>
 
-    <main class="wrap" id="main">
+    <main class={variant === 'index' ? 'wrap wrap--index' : 'wrap'} id="main">
       <slot />
     </main>
 

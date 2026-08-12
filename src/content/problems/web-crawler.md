@@ -2,7 +2,7 @@
 title: 'Design a web crawler'
 summary: 'Politeness is the real constraint, not throughput — and the whole design looks different from the receiving end.'
 date: 2026-08-13
-tags: ['crawling', 'queues', 'backpressure', 'ai']
+tags: ['queues', 'abuse', 'ai']
 draft: false
 source:
   label: "Hello Interview's web crawler breakdown"

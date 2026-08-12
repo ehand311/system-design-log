@@ -485,6 +485,80 @@ a.tag:hover {
   color: var(--accent-deep);
 }
 
+/* ---------- index layout ----------
+   The 720px column exists for prose line length. The homepage is a scannable
+   list, not prose, so it widens and opens a rail once there is room. */
+
+.wrap--index > .rail {
+  display: none;
+}
+
+@media (min-width: 1240px) {
+  .wrap--index {
+    max-width: 1064px;
+    display: grid;
+    grid-template-columns: 200px minmax(0, 820px);
+    gap: 44px;
+    align-items: start;
+  }
+
+  .wrap--index > .rail {
+    display: block;
+    position: sticky;
+    top: 132px;
+  }
+}
+
+.index-main {
+  min-width: 0;
+}
+
+.rail__label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin: 0 0 10px;
+}
+
+.rail__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-left: 1px solid var(--border);
+}
+
+.rail__link {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  padding: 5px 0 5px 14px;
+  margin-left: -1px;
+  border-left: 1px solid transparent;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.rail__link:hover {
+  color: var(--accent-deep);
+  border-left-color: var(--accent);
+}
+
+.rail__count {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-dim);
+}
+
+.rail__foot {
+  margin: 16px 0 0;
+  padding-left: 14px;
+  font-size: 0.78rem;
+}
+
 /* ---------- table of contents ----------
    Lives in the empty left gutter rather than narrowing the reading column.
    Hidden below 1280px, where there is no gutter to put it in. */

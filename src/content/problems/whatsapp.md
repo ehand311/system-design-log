@@ -3,7 +3,7 @@ title: 'Design WhatsApp'
 summary: 'TODO — one sentence on the most interesting thing you found. Shows on the homepage.'
 # TODO: set to the date you publish. Numbering is by publication order.
 date: 2026-01-01
-tags: ['messaging', 'encryption', 'delivery-guarantees']
+tags: ['distributed-systems', 'abuse']
 draft: true
 # Uncomment if you follow someone else's breakdown:
 # source:

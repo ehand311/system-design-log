@@ -1,0 +1,42 @@
+---
+import { getProblems } from '../lib/content';
+import { tagSlug } from '../lib/tags';
+
+const problems = await getProblems();
+
+const counts = new Map<string, { label: string; count: number }>();
+for (const problem of problems) {
+  for (const tag of problem.data.tags) {
+    const slug = tagSlug(tag);
+    const existing = counts.get(slug);
+    if (existing) existing.count += 1;
+    else counts.set(slug, { label: tag, count: 1 });
+  }
+}
+
+// Most-used first, then alphabetical so ordering is stable between builds.
+const topics = [...counts].sort(
+  (a, b) => b[1].count - a[1].count || a[1].label.localeCompare(b[1].label)
+);
+---
+
+{
+  topics.length > 0 && (
+    <aside class="rail" aria-label="Topics">
+      <p class="rail__label">Topics</p>
+      <ul class="rail__list">
+        {topics.map(([slug, { label, count }]) => (
+          <li>
+            <a class="rail__link" href={`/tags/${slug}/`}>
+              <span>{label}</span>
+              <span class="rail__count">{count}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="rail__foot">
+        <a href="/rss.xml">RSS feed</a>
+      </p>
+    </aside>
+  )
+}

@@ -2,7 +2,7 @@
 title: 'Design an ad click aggregator'
 summary: 'Counting is easy until money depends on the count — then idempotency, late events, and hot shards decide the design.'
 date: 2026-08-13
-tags: ['streaming', 'idempotency', 'fraud']
+tags: ['streaming', 'queues', 'abuse']
 draft: false
 source:
   label: "Hello Interview's ad click aggregator breakdown"

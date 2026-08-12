@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import TopicsRail from '../components/TopicsRail.astro';
 import { tagSlug } from '../lib/tags';
 import { getProblems, byPublicationOrder } from '../lib/content';
 
@@ -22,46 +23,50 @@ const fmt = (d: Date) =>
   });
 ---
 
-<BaseLayout title="System Design Log — Eric Handal">
-  <p class="eyebrow">System design log</p>
-  <h1>What I learned building it out loud</h1>
-  <p class="lede">
-    One problem at a time. For each, I work through the requirements, sketch an approach, and write
-    down the tradeoffs I hit — including the ones I got wrong the first time. These are learning
-    notes, not authoritative guides.
-  </p>
+<BaseLayout title="System Design Log — Eric Handal" variant="index">
+  <TopicsRail />
 
-  <h2 class="section-label">Problems</h2>
-  {
-    problems.length === 0 ? (
-      <p class="empty">No write-ups published yet. First one is in progress.</p>
-    ) : (
-      <ul class="entry-list">
-        {problems.map((problem) => (
-          <li class="entry">
-            <div class="entry__row">
-              <span class="entry__num">{numberFor.get(problem.id)}</span>
-              <div class="entry__body">
-                <h3 class="entry__title">
-                  <a href={`/problems/${problem.id}/`}>{problem.data.title}</a>
-                  {problem.data.draft && <span class="badge badge--draft">Draft</span>}
-                </h3>
-                <p class="entry__summary">{problem.data.summary}</p>
-                <p class="entry__date">{fmt(problem.data.date)}</p>
-                {problem.data.tags.length > 0 && (
-                  <span class="tag-row">
-                    {problem.data.tags.map((tag) => (
-                      <a class="tag" href={`/tags/${tagSlug(tag)}/`}>
-                        {tag}
-                      </a>
-                    ))}
-                  </span>
-                )}
+  <div class="index-main">
+    <p class="eyebrow">System design log</p>
+    <h1>What I learned building it out loud</h1>
+    <p class="lede">
+      One problem at a time. For each, I work through the requirements, sketch an approach, and
+      write down the tradeoffs I hit — including the ones I got wrong the first time. These are
+      learning notes, not authoritative guides.
+    </p>
+
+    <h2 class="section-label">Problems</h2>
+    {
+      problems.length === 0 ? (
+        <p class="empty">No write-ups published yet. First one is in progress.</p>
+      ) : (
+        <ul class="entry-list">
+          {problems.map((problem) => (
+            <li class="entry">
+              <div class="entry__row">
+                <span class="entry__num">{numberFor.get(problem.id)}</span>
+                <div class="entry__body">
+                  <h3 class="entry__title">
+                    <a href={`/problems/${problem.id}/`}>{problem.data.title}</a>
+                    {problem.data.draft && <span class="badge badge--draft">Draft</span>}
+                  </h3>
+                  <p class="entry__summary">{problem.data.summary}</p>
+                  <p class="entry__date">{fmt(problem.data.date)}</p>
+                  {problem.data.tags.length > 0 && (
+                    <span class="tag-row">
+                      {problem.data.tags.map((tag) => (
+                        <a class="tag" href={`/tags/${tagSlug(tag)}/`}>
+                          {tag}
+                        </a>
+                      ))}
+                    </span>
+                  )}
+                </div>
               </div>
-            </div>
-          </li>
-        ))}
-      </ul>
-    )
-  }
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </div>
 </BaseLayout>
