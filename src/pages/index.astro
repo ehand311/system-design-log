@@ -1,22 +1,13 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import TopicsRail from '../components/TopicsRail.astro';
-import { tagSlug } from '../lib/tags';
+import ProblemCard from '../components/ProblemCard.astro';
 import { getProblems, byPublicationOrder } from '../lib/content';
 
 // Newest first, numbered by position down the page so the list always starts
 // at 01. The number is a reading position, not an identifier — the URL is the
 // identifier, and nothing links to these numbers.
 const problems = (await getProblems()).sort(byPublicationOrder).reverse();
-
-// Frontmatter dates parse as UTC midnight; format in UTC so they don't shift a day back.
-const fmt = (d: Date) =>
-  d.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    timeZone: 'UTC',
-  });
 ---
 
 <BaseLayout title="System Design Log — Eric Handal" variant="index">
@@ -24,7 +15,7 @@ const fmt = (d: Date) =>
 
   <div class="index-main">
     <p class="eyebrow">System design log</p>
-    <h1>What I learned building it out loud</h1>
+    <h1 class="display">What I learned building it out loud</h1>
     <p class="lede">
       One problem at a time. For each, I work through the requirements, sketch an approach, and
       write down the tradeoffs I hit — including the ones I got wrong the first time. These are
@@ -36,30 +27,9 @@ const fmt = (d: Date) =>
       problems.length === 0 ? (
         <p class="empty">No write-ups published yet. First one is in progress.</p>
       ) : (
-        <ul class="entry-list">
+        <ul class="card-grid">
           {problems.map((problem, i) => (
-            <li class="entry">
-              <div class="entry__row">
-                <span class="entry__num">{String(i + 1).padStart(2, '0')}</span>
-                <div class="entry__body">
-                  <h3 class="entry__title">
-                    <a href={`/problems/${problem.id}/`}>{problem.data.title}</a>
-                    {problem.data.draft && <span class="badge badge--draft">Draft</span>}
-                  </h3>
-                  <p class="entry__summary">{problem.data.summary}</p>
-                  <p class="entry__date">{fmt(problem.data.date)}</p>
-                  {problem.data.tags.length > 0 && (
-                    <span class="tag-row">
-                      {problem.data.tags.map((tag) => (
-                        <a class="tag" href={`/tags/${tagSlug(tag)}/`}>
-                          {tag}
-                        </a>
-                      ))}
-                    </span>
-                  )}
-                </div>
-              </div>
-            </li>
+            <ProblemCard problem={problem} num={String(i + 1).padStart(2, '0')} />
           ))}
         </ul>
       )

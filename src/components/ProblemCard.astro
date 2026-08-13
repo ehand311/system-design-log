@@ -1,0 +1,47 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { tagSlug } from '../lib/tags';
+
+interface Props {
+  problem: CollectionEntry<'problems'>;
+  /** Display position, already zero-padded. Omit to hide the numeral. */
+  num?: string;
+}
+
+const { problem, num } = Astro.props;
+
+const date = problem.data.date.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+  timeZone: 'UTC',
+});
+---
+
+<li class="card reveal">
+  {num && <span class="card__num" aria-hidden="true">{num}</span>}
+
+  <h3 class="card__title">
+    {/* Stretched link: the ::after covers the whole card, so the entire card is
+        clickable while the accessible link text stays just the title. */}
+    <a class="card__link" href={`/problems/${problem.id}/`}>{problem.data.title}</a>
+    {problem.data.draft && <span class="badge badge--draft">Draft</span>}
+  </h3>
+
+  <p class="card__summary">{problem.data.summary}</p>
+
+  <div class="card__foot">
+    <time class="card__date" datetime={problem.data.date.toISOString()}>{date}</time>
+    {
+      problem.data.tags.length > 0 && (
+        <span class="tag-row">
+          {problem.data.tags.map((tag) => (
+            <a class="tag" href={`/tags/${tagSlug(tag)}/`}>
+              {tag}
+            </a>
+          ))}
+        </span>
+      )
+    }
+  </div>
+</li>

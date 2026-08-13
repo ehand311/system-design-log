@@ -88,8 +88,23 @@ a:hover {
 /* ---------- header / footer ---------- */
 
 .site-header {
-  padding: 26px 0 0;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  padding: 20px 0;
   margin-bottom: 56px;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: saturate(180%) blur(16px);
+  -webkit-backdrop-filter: saturate(180%) blur(16px);
+  border-bottom: 1px solid transparent;
+  transition:
+    border-color 0.3s ease,
+    background 0.3s ease;
+}
+
+/* Hairline appears only once the page has moved under it. */
+.site-header.is-stuck {
+  border-bottom-color: var(--border);
 }
 
 .site-header .wrap {
@@ -168,11 +183,20 @@ a:hover {
 }
 
 h1 {
-  font-size: clamp(1.95rem, 5vw, 2.5rem);
-  line-height: 1.12;
-  letter-spacing: -0.025em;
+  font-size: clamp(2.1rem, 4.6vw, 2.85rem);
+  line-height: 1.08;
+  letter-spacing: -0.032em;
   font-weight: 600;
-  margin: 0 0 16px;
+  margin: 0 0 18px;
+  text-wrap: balance;
+}
+
+/* Landing headline only — articles keep the tighter h1 above. */
+.display {
+  font-size: clamp(2.4rem, 6vw, 3.6rem);
+  letter-spacing: -0.038em;
+  line-height: 1.03;
+  margin-bottom: 22px;
 }
 
 h2 {
@@ -209,64 +233,153 @@ h3 {
   margin: 64px 0 0;
 }
 
-.entry-list {
+/* ---------- problem cards ---------- */
+
+.card-grid {
   list-style: none;
-  margin: 0;
+  margin: 20px 0 0;
   padding: 0;
+  display: grid;
+  gap: 16px;
 }
 
-.entry {
-  border-bottom: 1px solid var(--border);
+@media (min-width: 760px) {
+  .card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
-.entry__row {
-  display: flex;
-  gap: 18px;
-  align-items: flex-start;
-  padding: 24px 0;
+.card {
+  position: relative;
+  isolation: isolate;
+  padding: 26px 26px 22px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--bg);
+  overflow: hidden;
+  transition:
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.28s ease;
 }
 
-.entry__body {
-  min-width: 0;
+.card:hover {
+  transform: translateY(-3px);
+  border-color: var(--border-strong);
+  box-shadow:
+    0 1px 2px rgba(17, 24, 39, 0.04),
+    0 12px 28px -12px rgba(17, 24, 39, 0.18);
 }
 
-.entry__num {
+/* Standing in for the product photography this layout usually leans on. */
+.card__num {
+  position: absolute;
+  top: 12px;
+  right: 18px;
   font-family: var(--font-mono);
-  font-size: 0.72rem;
-  color: var(--text-dim);
-  padding-top: 6px;
-  flex-shrink: 0;
+  font-size: 2.6rem;
+  line-height: 1;
+  font-weight: 500;
+  color: var(--border);
+  letter-spacing: -0.03em;
+  transition: color 0.28s ease;
+  z-index: -1;
 }
 
-.entry__title {
-  font-size: 1.1rem;
+.card:hover .card__num {
+  color: var(--accent-soft);
+}
+
+.card__title {
+  font-size: 1.14rem;
   font-weight: 600;
-  letter-spacing: -0.012em;
+  letter-spacing: -0.015em;
+  line-height: 1.3;
   margin: 0;
+  padding-right: 48px;
 }
 
-.entry__title a {
+.card__link {
   color: var(--text);
   text-decoration: none;
+  transition: color 0.2s ease;
 }
 
-.entry__title a:hover {
+/* Makes the whole card the click target without nesting anchors. */
+.card__link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.card:hover .card__link {
   color: var(--accent-deep);
-  text-decoration: underline;
 }
 
-.entry__summary {
+.card__summary {
   color: var(--text-muted);
   font-size: 0.93rem;
-  line-height: 1.6;
-  margin: 4px 0 0;
+  line-height: 1.62;
+  margin: 8px 0 0;
 }
 
-.entry__date {
+.card__foot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.card__date {
   font-family: var(--font-mono);
   font-size: 0.7rem;
   color: var(--text-dim);
-  margin-top: 8px;
+}
+
+/* Sits above the stretched link so tags stay independently clickable. */
+.card__foot .tag-row {
+  position: relative;
+  z-index: 2;
+  margin-top: 0;
+}
+
+/* ---------- scroll reveal ---------- */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* No JS, no reveal script — never leave content invisible. */
+.no-js .reveal {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 /* ---------- tags ---------- */
@@ -378,6 +491,12 @@ a.tag:hover {
 
 .prose {
   margin-top: 8px;
+}
+
+/* Clears the sticky header when jumping to a section from the TOC. */
+.prose h2,
+.prose h3 {
+  scroll-margin-top: 96px;
 }
 
 .prose p {
