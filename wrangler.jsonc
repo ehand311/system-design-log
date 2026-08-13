@@ -4,6 +4,7 @@
   "compatibility_date": "2026-06-01",
   "assets": {
     "directory": "./dist",
+    "html_handling": "auto-trailing-slash",
     // Without this, a missing path returns a bare 404 instead of dist/404.html.
     "not_found_handling": "404-page"
   }
