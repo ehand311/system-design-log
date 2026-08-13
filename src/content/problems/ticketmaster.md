@@ -3,6 +3,17 @@ title: 'Design Ticketmaster'
 summary: 'Why holding a database transaction open while a human picks a seat is the wrong instinct, and what replaces it.'
 date: 2026-08-13
 tags: ['contention', 'caching', 'abuse']
+problemType: 'Scarce inventory'
+constraint: 'Never double-sell'
+scale: 'Millions of users chasing fixed seats'
+lesson: 'Keep human-length waits out of the database; use short Redis holds, then commit fast with the database as final arbiter.'
+diagram:
+  - Waiting room
+  - Event and seat search
+  - Seat hold service
+  - Redis TTL reservation
+  - Payment flow
+  - Database booking commit
 draft: false
 source:
   label: "Hello Interview's Ticketmaster breakdown"

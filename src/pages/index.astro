@@ -8,6 +8,7 @@ import { getProblems, byPublicationOrder } from '../lib/content';
 // at 01. The number is a reading position, not an identifier — the URL is the
 // identifier, and nothing links to these numbers.
 const problems = (await getProblems()).sort(byPublicationOrder).reverse();
+const topics = new Set(problems.flatMap((problem) => problem.data.tags));
 ---
 
 <BaseLayout title="System Design Log — Eric Handal" variant="index">
@@ -21,6 +22,21 @@ const problems = (await getProblems()).sort(byPublicationOrder).reverse();
       write down the tradeoffs I hit — including the ones I got wrong the first time. These are
       learning notes, not authoritative guides.
     </p>
+
+    <dl class="index-proof" aria-label="Log summary">
+      <div>
+        <dt>{problems.length}</dt>
+        <dd>case studies</dd>
+      </div>
+      <div>
+        <dt>{topics.size}</dt>
+        <dd>topics</dd>
+      </div>
+      <div>
+        <dt>Claude</dt>
+        <dd>built counterpart</dd>
+      </div>
+    </dl>
 
     <h2 class="section-label">Problems</h2>
     {

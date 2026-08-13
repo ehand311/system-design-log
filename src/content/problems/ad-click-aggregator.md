@@ -3,6 +3,17 @@ title: 'Design an ad click aggregator'
 summary: 'Counting is easy until money depends on the count — then idempotency, late events, and hot shards decide the design.'
 date: 2026-08-13
 tags: ['streaming', 'queues', 'abuse']
+problemType: 'Streaming analytics'
+constraint: 'Idempotent money events'
+scale: 'About 10k clicks per second'
+lesson: 'Exactly-once processing is not event identity; signed impression IDs are what stop duplicate and manufactured clicks.'
+diagram:
+  - Click redirect endpoint
+  - Signed impression ID check
+  - Partitioned event stream
+  - Windowed aggregation
+  - Analytics store
+  - Reconciliation jobs
 draft: false
 source:
   label: "Hello Interview's ad click aggregator breakdown"

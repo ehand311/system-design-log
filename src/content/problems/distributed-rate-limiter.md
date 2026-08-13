@@ -3,6 +3,17 @@ title: 'Design a distributed rate limiter'
 summary: 'Notes from working through the token bucket approach — why atomicity, not algorithm choice, turns out to be the hard part.'
 date: 2026-08-12
 tags: ['caching', 'contention', 'abuse']
+problemType: 'Request-path control'
+constraint: 'Atomic counters'
+scale: 'Roughly 1M requests per second'
+lesson: 'The algorithm is not the hard part; the update has to execute atomically where the shared state lives.'
+diagram:
+  - API gateway
+  - Client identity key
+  - Redis shard
+  - Atomic Lua bucket update
+  - Allow or 429
+  - Policy telemetry
 draft: false
 source:
   label: "Hello Interview's distributed rate limiter breakdown"

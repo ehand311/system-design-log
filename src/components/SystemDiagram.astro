@@ -1,0 +1,27 @@
+---
+interface Props {
+  steps?: string[];
+}
+
+const { steps = [] } = Astro.props;
+const show = steps.length >= 2;
+---
+
+{
+  show && (
+    <section class="system-diagram" aria-labelledby="system-diagram-title">
+      <div class="system-diagram__heading">
+        <p class="eyebrow">Architecture sketch</p>
+        <h2 id="system-diagram-title">How the pieces move</h2>
+      </div>
+      <ol class="system-diagram__flow">
+        {steps.map((step, i) => (
+          <li>
+            <span class="system-diagram__index">{String(i + 1).padStart(2, '0')}</span>
+            <span>{step}</span>
+          </li>
+        ))}
+      </ol>
+    </section>
+  )
+}

@@ -3,6 +3,7 @@ import { render } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import TableOfContents from '../../components/TableOfContents.astro';
+import SystemDiagram from '../../components/SystemDiagram.astro';
 import { tagSlug, readingMinutes } from '../../lib/tags';
 import { getProblems, byPublicationOrder } from '../../lib/content';
 
@@ -40,6 +41,11 @@ const formattedDate = problem.data.date.toLocaleDateString('en-US', {
 
 const minutes = readingMinutes(problem.body ?? '');
 const source = problem.data.source;
+const brief = [
+  { label: 'Problem type', value: problem.data.problemType },
+  { label: 'Core constraint', value: problem.data.constraint },
+  { label: 'Scale signal', value: problem.data.scale },
+].filter((item) => item.value);
 ---
 
 <BaseLayout title={`${problem.data.title} — Eric Handal`} description={problem.data.summary}>
@@ -47,22 +53,51 @@ const source = problem.data.source;
 
   <a class="back-link" href="/">&larr; All problems</a>
 
-  <p class="post-meta">
-    <span>{formattedDate}</span>
-    <span>{minutes} min read</span>
-    {problem.data.draft && <span class="badge badge--draft">Draft — not published</span>}
-    {source && <span class="badge">Study notes</span>}
-    {
-      problem.data.tags.map((tag) => (
-        <a class="tag" href={`/tags/${tagSlug(tag)}/`}>
-          {tag}
-        </a>
-      ))
-    }
-  </p>
+  <header class="problem-hero">
+    <p class="post-meta">
+      <span>{formattedDate}</span>
+      <span>{minutes} min read</span>
+      {problem.data.draft && <span class="badge badge--draft">Draft - not published</span>}
+      {source && <span class="badge">Study notes</span>}
+    </p>
 
-  <h1>{problem.data.title}</h1>
-  <p class="lede">{problem.data.summary}</p>
+    <h1>{problem.data.title}</h1>
+    <p class="lede">{problem.data.summary}</p>
+
+    {
+      problem.data.tags.length > 0 && (
+        <div class="tag-row problem-hero__tags" aria-label="Topics">
+          {problem.data.tags.map((tag) => (
+            <a class="tag" href={`/tags/${tagSlug(tag)}/`}>
+              {tag}
+            </a>
+          ))}
+        </div>
+      )
+    }
+
+    {
+      brief.length > 0 && (
+        <dl class="problem-brief">
+          {brief.map((item) => (
+            <div>
+              <dt>{item.label}</dt>
+              <dd>{item.value}</dd>
+            </div>
+          ))}
+        </dl>
+      )
+    }
+
+    {
+      problem.data.lesson && (
+        <aside class="insight-card" aria-label="Main lesson">
+          <span>Main lesson</span>
+          <p>{problem.data.lesson}</p>
+        </aside>
+      )
+    }
+  </header>
 
   {
     source && (
@@ -72,6 +107,8 @@ const source = problem.data.source;
       </p>
     )
   }
+
+  <SystemDiagram steps={problem.data.diagram} />
 
   <article class="prose">
     <Content />

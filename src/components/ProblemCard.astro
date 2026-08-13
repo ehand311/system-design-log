@@ -16,10 +16,28 @@ const date = problem.data.date.toLocaleDateString('en-US', {
   day: 'numeric',
   timeZone: 'UTC',
 });
+
+const cardMeta = [
+  problem.data.problemType,
+  problem.data.constraint,
+].filter(Boolean);
 ---
 
 <li class="card reveal">
   {num && <span class="card__num" aria-hidden="true">{num}</span>}
+
+  {
+    cardMeta.length > 0 && (
+      <p class="card__kicker">
+        {cardMeta.map((item, i) => (
+          <>
+            {i > 0 && <span aria-hidden="true">/</span>}
+            <span>{item}</span>
+          </>
+        ))}
+      </p>
+    )
+  }
 
   <h3 class="card__title">
     {/* Stretched link: the ::after covers the whole card, so the entire card is
@@ -29,6 +47,15 @@ const date = problem.data.date.toLocaleDateString('en-US', {
   </h3>
 
   <p class="card__summary">{problem.data.summary}</p>
+
+  {
+    problem.data.lesson && (
+      <p class="card__lesson">
+        <span>Lesson</span>
+        {problem.data.lesson}
+      </p>
+    )
+  }
 
   <div class="card__foot">
     <time class="card__date" datetime={problem.data.date.toISOString()}>{date}</time>

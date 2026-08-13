@@ -1,7 +1,9 @@
 :root {
-  --bg: #ffffff;
-  --bg-subtle: #f9fafb;
-  --border: #e5e7eb;
+  --bg: #fffdf8;
+  --surface: #ffffff;
+  --surface-raised: #f8fbfb;
+  --bg-subtle: #f5f7f8;
+  --border: #e2e8ea;
   --border-strong: #d1d5db;
   --text: #111827;
   /* Both pass WCAG AA (4.5:1) on white: muted 7.0:1, dim 4.83:1.
@@ -11,6 +13,13 @@
   --accent: #0d9488;
   --accent-deep: #0f766e;
   --accent-soft: #ccfbf1;
+  --accent-blue: #2563eb;
+  --accent-blue-soft: #dbeafe;
+  --accent-warm: #b45309;
+  --accent-warm-soft: #fef3c7;
+  --accent-rose: #be123c;
+  --accent-rose-soft: #ffe4e6;
+  --shadow-soft: 0 18px 48px -36px rgba(15, 23, 42, 0.35);
   --max-width: 720px;
   --font-sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter,
     Helvetica, Arial, sans-serif;
@@ -29,7 +38,8 @@ html {
 
 body {
   margin: 0;
-  background: var(--bg);
+  background:
+    linear-gradient(180deg, #fffdf8 0, #fffdf8 420px, #f8fafc 100%);
   color: var(--text);
   font-family: var(--font-sans);
   font-size: 17px;
@@ -93,7 +103,7 @@ a:hover {
   z-index: 50;
   padding: 20px 0;
   margin-bottom: 56px;
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 253, 248, 0.96);
   backdrop-filter: saturate(180%) blur(16px);
   -webkit-backdrop-filter: saturate(180%) blur(16px);
   border-bottom: 1px solid transparent;
@@ -105,6 +115,7 @@ a:hover {
 /* Hairline appears only once the page has moved under it. */
 .site-header.is-stuck {
   border-bottom-color: var(--border);
+  box-shadow: 0 10px 28px -24px rgba(15, 23, 42, 0.45);
 }
 
 .site-header .wrap {
@@ -233,6 +244,43 @@ h3 {
   margin: 64px 0 0;
 }
 
+.index-proof {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  margin: 32px 0 0;
+  padding: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+}
+
+.index-proof div {
+  background: rgba(255, 255, 255, 0.88);
+  padding: 16px;
+}
+
+.index-proof dt {
+  margin: 0;
+  font-size: 1.2rem;
+  line-height: 1.1;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.index-proof dd {
+  margin: 6px 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  line-height: 1.4;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+}
+
 /* ---------- problem cards ---------- */
 
 .card-grid {
@@ -252,10 +300,11 @@ h3 {
 .card {
   position: relative;
   isolation: isolate;
-  padding: 26px 26px 22px;
+  padding: 24px 24px 20px;
   border: 1px solid var(--border);
-  border-radius: 16px;
-  background: var(--bg);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(248, 251, 251, 0.96));
   overflow: hidden;
   transition:
     transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
@@ -265,10 +314,10 @@ h3 {
 
 .card:hover {
   transform: translateY(-3px);
-  border-color: var(--border-strong);
+  border-color: rgba(13, 148, 136, 0.42);
   box-shadow:
     0 1px 2px rgba(17, 24, 39, 0.04),
-    0 12px 28px -12px rgba(17, 24, 39, 0.18);
+    0 18px 42px -22px rgba(17, 24, 39, 0.24);
 }
 
 /* Standing in for the product photography this layout usually leans on. */
@@ -280,7 +329,7 @@ h3 {
   font-size: 2.6rem;
   line-height: 1;
   font-weight: 500;
-  color: var(--border);
+  color: #dbe4e7;
   letter-spacing: -0.03em;
   transition: color 0.28s ease;
   z-index: -1;
@@ -288,6 +337,25 @@ h3 {
 
 .card:hover .card__num {
   color: var(--accent-soft);
+}
+
+.card__kicker {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 0 0 12px;
+  padding-right: 52px;
+  font-family: var(--font-mono);
+  font-size: 0.67rem;
+  line-height: 1.5;
+  color: var(--accent-blue);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.card__kicker span[aria-hidden='true'] {
+  color: var(--border-strong);
 }
 
 .card__title {
@@ -322,6 +390,26 @@ h3 {
   font-size: 0.93rem;
   line-height: 1.62;
   margin: 8px 0 0;
+}
+
+.card__lesson {
+  margin: 16px 0 0;
+  padding: 11px 12px;
+  border-left: 2px solid var(--accent-warm);
+  background: rgba(254, 243, 199, 0.42);
+  color: #3f3f46;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.card__lesson span {
+  display: block;
+  margin-bottom: 3px;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent-warm);
 }
 
 .card__foot {
@@ -478,6 +566,21 @@ a.tag:hover {
 
 /* ---------- article ---------- */
 
+.problem-hero {
+  position: relative;
+  padding: 30px 0 8px;
+}
+
+.problem-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -24px;
+  right: -24px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-blue), transparent);
+}
+
 .post-meta {
   display: flex;
   gap: 14px;
@@ -489,14 +592,114 @@ a.tag:hover {
   margin-bottom: 14px;
 }
 
+.problem-hero__tags {
+  margin-top: 18px;
+}
+
+.problem-brief {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  margin: 26px 0 0;
+  padding: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+}
+
+.problem-brief div {
+  min-width: 0;
+  background: rgba(255, 255, 255, 0.88);
+  padding: 16px;
+}
+
+.problem-brief dt {
+  margin: 0 0 7px;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  line-height: 1.4;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.problem-brief dd {
+  margin: 0;
+  color: var(--text);
+  font-size: 0.93rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.35;
+}
+
+.insight-card {
+  margin: 20px 0 0;
+  padding: 18px 20px;
+  background: #fff8e6;
+  border: 1px solid #f4d58a;
+  border-left: 3px solid var(--accent-warm);
+  border-radius: 8px;
+  box-shadow: 0 16px 42px -34px rgba(180, 83, 9, 0.55);
+}
+
+.insight-card span {
+  display: block;
+  margin-bottom: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.67rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent-warm);
+}
+
+.insight-card p {
+  margin: 0;
+  color: #3f3f46;
+  font-size: 0.98rem;
+  line-height: 1.55;
+}
+
 .prose {
-  margin-top: 8px;
+  margin-top: 28px;
 }
 
 /* Clears the sticky header when jumping to a section from the TOC. */
 .prose h2,
 .prose h3 {
   scroll-margin-top: 96px;
+}
+
+.prose h2 {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  padding-top: 18px;
+  border-top: 1px solid rgba(226, 232, 234, 0.78);
+}
+
+.prose h2::before {
+  content: '';
+  flex: 0 0 8px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  transform: translateY(-1px);
+}
+
+.prose h2[id='the-part-i-got-wrong']::before {
+  background: var(--accent-rose);
+}
+
+.prose h2[id='tradeoff-worth-arguing-about']::before {
+  background: var(--accent-warm);
+}
+
+.prose h2[id='where-id-push-given-my-background']::before,
+.prose h2[id='the-view-from-the-other-side']::before {
+  background: var(--accent-blue);
 }
 
 .prose p {
@@ -590,6 +793,79 @@ a.tag:hover {
   border: none;
   border-top: 1px solid var(--border);
   margin: 40px 0;
+}
+
+.system-diagram {
+  margin: 30px 0 34px;
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(248, 251, 251, 0.92));
+  box-shadow: var(--shadow-soft);
+}
+
+.system-diagram__heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: end;
+  margin-bottom: 18px;
+}
+
+.system-diagram__heading .eyebrow {
+  margin: 0;
+  color: var(--accent-blue);
+}
+
+.system-diagram__heading h2 {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--text);
+}
+
+.system-diagram__flow {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.system-diagram__flow li {
+  position: relative;
+  min-height: 86px;
+  padding: 14px 14px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 0.86rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.system-diagram__flow li:not(:nth-child(3n))::after {
+  content: '->';
+  position: absolute;
+  right: -12px;
+  top: 50%;
+  z-index: 2;
+  color: var(--accent-blue);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  background: var(--surface-raised);
+  padding: 0 3px;
+  transform: translateY(-50%);
+}
+
+.system-diagram__index {
+  display: block;
+  margin-bottom: 10px;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  color: var(--accent-blue);
 }
 
 .back-link {
@@ -812,7 +1088,50 @@ a.tag:hover {
     margin-bottom: 40px;
   }
 
+  .problem-hero {
+    padding-top: 24px;
+  }
+
+  .problem-brief,
+  .index-proof {
+    grid-template-columns: 1fr;
+  }
+
+  .system-diagram {
+    padding: 18px;
+  }
+
+  .system-diagram__heading {
+    display: block;
+  }
+
+  .system-diagram__heading h2 {
+    margin-top: 6px;
+  }
+
+  .system-diagram__flow {
+    grid-template-columns: 1fr;
+  }
+
+  .system-diagram__flow li {
+    min-height: auto;
+  }
+
+  .system-diagram__flow li:not(:nth-child(3n))::after {
+    content: none;
+  }
+
   .entry__link {
     gap: 14px;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 820px) {
+  .system-diagram__flow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .system-diagram__flow li::after {
+    content: none !important;
   }
 }

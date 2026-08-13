@@ -3,6 +3,17 @@ title: 'Design a web crawler'
 summary: 'Politeness is the real constraint, not throughput — and the whole design looks different from the receiving end.'
 date: 2026-08-13
 tags: ['queues', 'abuse', 'ai']
+problemType: 'Crawling pipeline'
+constraint: 'Per-domain politeness'
+scale: 'Billions of pages across many domains'
+lesson: 'Partition the frontier by domain so the crawler can be slow to each site while staying busy overall.'
+diagram:
+  - Seed URLs
+  - Domain frontier
+  - Politeness scheduler
+  - Fetch workers
+  - HTML and text storage
+  - URL and content dedup
 draft: false
 source:
   label: "Hello Interview's web crawler breakdown"

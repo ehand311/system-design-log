@@ -10,6 +10,11 @@ const problems = defineCollection({
     summary: z.string(),
     date: z.coerce.date(),
     tags: z.array(z.string()).default([]),
+    problemType: z.string().optional(),
+    constraint: z.string().optional(),
+    scale: z.string().optional(),
+    lesson: z.string().optional(),
+    diagram: z.array(z.string()).optional(),
     draft: z.boolean().default(false),
     // Set when the write-up follows someone else's breakdown rather than
     // being original analysis. Surfaces a "Study notes" badge on the page.
